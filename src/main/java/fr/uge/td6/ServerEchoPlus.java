@@ -1,4 +1,4 @@
-package fr.uge.td5;
+package fr.uge.td6;
 
 public class ServerEchoPlus {
 }

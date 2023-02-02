@@ -1,7 +1,8 @@
-package fr.uge.td5;
+package fr.uge.td6;
 
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -25,7 +26,9 @@ public class ServerEcho {
         selector = Selector.open();
         dc = DatagramChannel.open();
         dc.bind(new InetSocketAddress(port));
-        // TODO set dc in non-blocking mode and register it to the selector
+
+        dc.configureBlocking(false);
+        dc.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
     public void serve() throws IOException {
@@ -44,16 +47,28 @@ public class ServerEcho {
                 doRead(key);
             }
         } catch (IOException e) {
-            // TODO
+            throw new UncheckedIOException(e);
         }
     }
 
     private void doRead(SelectionKey key) throws IOException {
-        // TODO
+        var channel = (DatagramChannel) key.channel();
+        sender = channel.receive(buffer);
+        if (sender != null) {
+            logger.info("warning");
+        }
+        key.interestOps(SelectionKey.OP_WRITE);
     }
 
     private void doWrite(SelectionKey key) throws IOException {
-        // TODO
+        var channel = (DatagramChannel) key.channel();
+        channel.send(buffer.flip(), sender);
+        if (buffer.hasRemaining()){
+            logger.info("warning");
+            return;
+        }
+        buffer.flip().clear();
+        key.interestOps(SelectionKey.OP_READ);
     }
 
     public static void usage() {

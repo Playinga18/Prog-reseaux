@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import static java.nio.file.StandardOpenOption.*;
 
 public class ClientIdUpperCaseUDPOneByOne {
+    /*
 
     private static Logger logger = Logger.getLogger(ClientIdUpperCaseUDPOneByOne.class.getName());
     private static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -115,4 +116,5 @@ public class ClientIdUpperCaseUDPOneByOne {
         // Create client with the parameters and launch it
         new ClientIdUpperCaseUDPOneByOne(inFilename, outFilename, timeout, server).launch();
     }
+     */
 }
